@@ -157,7 +157,24 @@ void del()
 
 void save()
 {
+	FILE *f;
 
+	char fileName[15];
+	cur = tail;
+	
+	printf("Введите имя файла: ");
+	gets_s(fileName);
+
+
+	f = fopen(fileName, "w");
+	fwrite(&cur, sizeof(SRecord), 1, f);
+
+	while (cur != NULL)
+	{
+
+
+
+	}
 }
 
 
