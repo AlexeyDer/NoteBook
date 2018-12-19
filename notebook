@@ -1,0 +1,233 @@
+#include <stdio.h>
+#include <conio.h>
+#include <malloc.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <string.h>
+
+struct SRecord {
+	char fio[50];
+	char phone_Number[11];
+};
+
+
+ struct stack
+ {
+	 SRecord data;
+
+	 stack *next;
+	 stack *prev;
+
+ };
+
+	stack* head = NULL;
+	stack* tail = NULL;
+	stack *cur;
+
+void add_Note()
+{
+	system("cls");
+
+	stack *cur;
+
+	cur = (stack*)malloc(sizeof(stack));
+
+	printf("Введите ФИО: ");
+	gets_s(cur->data.fio);
+
+	printf("\nВведите номер телефона: ");
+	gets_s(cur->data.phone_Number);
+
+	cur->next = NULL;
+	cur->prev = NULL;
+
+	if (head == NULL)
+	{
+		head = cur;
+		tail = cur;
+		
+	}
+	else
+	{
+		head->next = cur;
+		cur->prev = head;
+		head = cur;
+						
+	}
+	
+}
+
+
+int print()
+{
+
+	cur = tail;
+
+	int numOfNotes = 1;
+
+
+	while(cur != NULL)
+	{
+		system("cls");
+
+		printf("\n\t%d заметка:\n", numOfNotes);
+
+		printf("\nФИО: %s\n", cur->data.fio);
+		printf("Номер телефона: %s\n\n", &cur->data.phone_Number);
+
+		unsigned char c = _getch(); 
+
+		if (c == 75)
+		{	
+			numOfNotes--;
+			cur = cur->prev;
+		} 
+
+		if (c == 77)
+		{ 
+			printf(" \n\n");
+			numOfNotes++;
+			cur = cur->next;
+		}
+
+		if (c == 13)
+		{
+			return numOfNotes;
+		}
+
+		if (c == 27) break; 	
+		
+	}	
+	
+	return 0;
+}
+
+void del()
+{
+	//system("cls");
+
+
+	int num = print();
+
+	cur = tail;
+
+	//if (num == 0)
+	//{
+	//	return;
+	//}
+	
+	if (num == 1)
+	{
+		tail = tail->next;
+
+		if (tail != NULL)
+		{
+			tail->prev = NULL;
+			free(cur);
+		}
+		else
+		{
+			free(cur);
+		}
+	}
+	else
+	{
+		if (cur->next != NULL)
+		{
+
+			for (int i = 2; i < num; i++)
+				cur = cur->next;
+
+
+			stack* temp = cur->next;
+
+			cur->next = temp->next;
+			temp->next->prev = cur;
+			free(temp);
+
+		}
+		else
+		{
+			head = cur->prev;
+			free(cur);
+		}
+	
+	}
+}
+
+void save()
+{
+
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#define menuSize 6
+
+char menu[menuSize][30] = { "Добавить запись", "Удалить запись", "Просмотреть список", "Сохранить список в файл", "Загрузить  список  из файла", "Выйти из программы" };
+
+int menuIndex = 0;  
+
+
+void op5()
+{
+	system("cls");
+	printf("\n");
+
+
+	_getwch();
+}
+
+void op6()
+{
+	system("cls");
+	printf("\n");
+
+
+	_getwch();
+}
+
+
+
+int main()
+{
+	setlocale(LC_ALL, "Rus");
+	
+
+	while (1)
+	{
+		system("cls");                             
+		for (int i = 0; i < menuSize; i++)        
+		{
+			if (i == menuIndex)
+				printf("=> ");      
+			else
+				printf("%d ", i + 1);   
+
+			printf("%s\n", menu[i]);           
+		}
+
+		unsigned char c = _getch();            
+		if (c == 80) menuIndex++;                 
+		else if (c == 72) menuIndex--;                    
+		if (menuIndex > menuSize - 1) menuIndex = menuSize - 1;
+		if (menuIndex < 0) menuIndex = 0;     
+
+		if (c == 13)
+		{                      
+
+			switch (menuIndex)
+			{
+			case 0:	add_Note(); break;
+			case 1: del(); break; 
+			case 2:	print(); break;
+			case 3: save(); break;
+			case 4: op5(); break;
+			case 5: op6(); break;
+			case 6: return 0;         
+			}
+		}
+	}
+	return 0;
+}
