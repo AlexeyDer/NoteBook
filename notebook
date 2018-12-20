@@ -64,6 +64,14 @@ int print()
 	cur = tail;
 
 	int numOfNotes = 1;
+	
+	if (cur == NULL)
+	{
+		system("cls");
+		printf("Заметок нет!");
+		_getwch();
+		return 0;
+	}
 
 
 	while(cur != NULL)
@@ -104,17 +112,14 @@ int print()
 
 void del()
 {
-	//system("cls");
-
-
 	int num = print();
 
 	cur = tail;
-
-	//if (num == 0)
-	//{
-	//	return;
-	//}
+	if (num == 0)
+	{
+		system("cls");
+		return;
+	}
 	
 	if (num == 1)
 	{
@@ -138,13 +143,23 @@ void del()
 			for (int i = 2; i < num; i++)
 				cur = cur->next;
 
+			if (cur->next != NULL)
+			{
+				stack* temp = cur->next;
+				cur->next = temp->next;
 
-			stack* temp = cur->next;
-
-			cur->next = temp->next;
-			temp->next->prev = cur;
-			free(temp);
-
+					if (temp->next != NULL)
+					{
+						temp->next->prev = cur;
+						free(temp);
+					}	
+					else
+					{
+						head = temp->prev;
+						free(temp);
+					}
+			}
+					
 		}
 		else
 		{
@@ -157,24 +172,61 @@ void del()
 
 void save()
 {
+	system("cls");
+	
 	FILE *f;
-
 	char fileName[15];
 	cur = tail;
 	
 	printf("Введите имя файла: ");
 	gets_s(fileName);
-
-
-	f = fopen(fileName, "w");
-	fwrite(&cur, sizeof(SRecord), 1, f);
+	fopen_s(&f ,fileName, "w");
 
 	while (cur != NULL)
 	{
-
-
-
+		fwrite(&cur->data, sizeof(stack), 1, f);
+		cur = cur->next;
 	}
+	fclose(f);
+}
+
+void download()
+{
+	FILE *f;
+	system("cls");
+	
+	char fileName[70];
+
+	//printf("Введите имя файла: ");
+ //   gets_s(fileName);
+
+	fopen_s(&f, "C:\\Users\\Alexey_Der\\source\\repos\\Notebook\\Notebook\\privet.txt", "r");
+	
+
+	while (1)
+	{
+		stack *temp =(stack*)malloc(sizeof(stack));
+
+		if (fread(&temp->data, sizeof(SRecord), 1, f) != 1) break;
+
+		temp->next = NULL;
+		temp->prev = NULL;
+
+		if (head == NULL)
+		{
+			head = temp;
+			tail = temp;
+			
+		}
+		else
+		{
+			head->next = temp;
+			temp->prev = head;
+			head = temp;
+		}
+		
+	}
+	fclose(f);
 }
 
 
@@ -211,7 +263,6 @@ int main()
 {
 	setlocale(LC_ALL, "Rus");
 	
-
 	while (1)
 	{
 		system("cls");                             
@@ -240,9 +291,8 @@ int main()
 			case 1: del(); break; 
 			case 2:	print(); break;
 			case 3: save(); break;
-			case 4: op5(); break;
-			case 5: op6(); break;
-			case 6: return 0;         
+			case 4: download(); break;
+			case 5: return 0; break;     
 			}
 		}
 	}
