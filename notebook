@@ -197,10 +197,10 @@ void download()
 	
 	char fileName[70];
 
-	//printf("Введите имя файла: ");
- //   gets_s(fileName);
+	printf("Введите название файла: ");
+	gets_s(fileName);
 
-	fopen_s(&f, "C:\\Users\\Alexey_Der\\source\\repos\\Notebook\\Notebook\\privet.txt", "r");
+	fopen_s(&f, fileName, "r");
 	
 
 	while (1)
@@ -237,27 +237,6 @@ void download()
 char menu[menuSize][30] = { "Добавить запись", "Удалить запись", "Просмотреть список", "Сохранить список в файл", "Загрузить  список  из файла", "Выйти из программы" };
 
 int menuIndex = 0;  
-
-
-void op5()
-{
-	system("cls");
-	printf("\n");
-
-
-	_getwch();
-}
-
-void op6()
-{
-	system("cls");
-	printf("\n");
-
-
-	_getwch();
-}
-
-
 
 int main()
 {
