@@ -117,6 +117,8 @@ void del()
 	cur = tail;
 	if (num == 0)
 	{
+		head = NULL;
+		tail = NULL;
 		system("cls");
 		return;
 	}
